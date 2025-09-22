@@ -101,20 +101,16 @@ if calc_selection == 1:
     velocity = float(input("Enter the free stream velocity: "))
     char_length = float(input("Enter the characteristic length, ex. chord length or fuselage length: "))
 
-    print(alt.dynamic_viscosity)
     R = reynolds(velocity, char_length)
     M = mach(velocity)
 
-    print(f"The Reynold's Number, R, is {R}")
+    print(f"\nThe Reynold's Number, R, is {R}")
     print(f"The Mach Number, M, is {M}")
 
     # Choose Flow Type
     if R > 100000:
         print("\nReynolds is greater than 100,000. Turbulent Flow has been selected")
-        print(R)
-        print(M)
         C_f = 0.455 / ((math.log10(15645290) ** 2.58) * ((1 + 0.144 * 0.282 ** 2) ** 0.65))
-        #C_f = 0.455 / (((math.log10(R)) ** 2.58) * (1 + (0.114 * (M ** 2))) ** 0.65)
     elif R <= 100000:
         print("\nReynolds is less than 100,000. Laminar flow has been selected\n")
         C_f = 1.328 / math.sqrt(R)
@@ -189,7 +185,7 @@ if calc_selection == 1:
     while True:  # Allow the user to enter a custom wetted area gathered from somewhere like XFLR5
         try:
             print('\n1: Calculate Estimated Wetted Area\n2: Custom Wetted Area, ex. from XFLR5 ')
-            raw_wetted_area_selection = int(input('Select 1 or 2: '))
+            raw_wetted_area_selection = int(input('\nSelect 1 or 2: '))
         except ValueError:
             print('\nInvalid Selection')
         else:
