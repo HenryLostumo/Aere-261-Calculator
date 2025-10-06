@@ -37,6 +37,24 @@ def get_yes_no_selection(prompt):  # returns boolean
             print("Invalid response. Please enter 'y' or 'n'.")
 
 
+def get_value(name, value):
+
+    # no value
+    if value is None:
+        return None
+    # single value
+    if isinstance(value, (int, float)):
+        return value
+
+    # multiple values
+    if isinstance(value, list):
+        print(f"\nMultiple values found for {name}:")
+        for i, v in enumerate(value, start=1):
+            print(f"{i}: {v}")
+        choice = get_menu_input(f'\nChoose a value for {name}: ', len(value))
+        return value[choice - 1]
+
+
 def reynolds(vel, char_len, rho, mu):
     return (rho * vel * char_len) / mu
 
@@ -49,7 +67,7 @@ def mach(vel, temp):
 def skin_friction(re, mach_num):
     if re > 100000:
         print("\nReynolds is greater than 100,000. Turbulent Flow has been selected")
-        return 0.455 / ((math.log10(15645290) ** 2.58) * ((1 + 0.144 * 0.282 ** 2) ** 0.65))
+        return 0.455 / ((math.log10(re) ** 2.58) * ((1 + 0.144 * mach_num ** 2) ** 0.65))
     elif re <= 100000:
         print("\nReynolds is less than 100,000. Laminar flow has been selected\n")
         return 1.328 / math.sqrt(re)
@@ -174,23 +192,70 @@ def cd_0_calculator():
     return C_f * FF_c * Q_c * wet_area_ratio
 
 
+# CALCULATOR MADE DURING PROJECT PART C
 def cl_calculator():
 
     # Altitude Selection
-    user_altitude = get_float_input("Enter your altitude: ")
+    user_altitude = get_float_input("\nEnter your altitude: ")
     alt = Atmosphere(user_altitude)
 
     # Gather Aircraft Info
-    gross_weight = get_float_input('Enter the Gross Weight of the aircraft: ')
-    velocity = get_float_input('Enter the Velocity of the aircraft: ')
-    planform = get_float_input('Enter the Planform Area of the aircraft: ')
+    gross_weight = get_float_input('\nEnter the Gross Weight of the aircraft: ')
+    velocity = get_float_input('\nEnter the Velocity of the aircraft: ')
+    planform = get_float_input('\nEnter the Planform Area of the aircraft: ')
 
     # Calculate Cl
     cl = gross_weight / (.5 * alt.density * (velocity ** 2) * planform)
     return cl
 
 
-calc_dict = {1: "Cd,0", 2: "Cl"}
+# CALCULATOR MADE DURING PROJECT PART C
+def cd_calculator():
+    print(f'\n1: Calculate a new Cd_0\n2: Use a stored value for Cd_0\n3: Enter a custom value for Cd_0')
+    cd_0_choice = get_menu_input('\nSelect one: ', 3)
+    if cd_0_choice == 1:
+        cd_0 = cd_0_calculator()
+    elif cd_0_choice == 2:
+        cd_0 = get_value('Cd_0', stored_calculations.get('Cd_0'))
+        if cd_0 is None:
+            print("No stored value found, running Cd_0 calculator first: ")
+            cd_0 = cd_0_calculator()
+    elif cd_0_choice == 3:
+        cd_0 = get_float_input('\nEnter a value for Cd_0: ')
+    else:
+        cd_0 = get_float_input('\nAn error occurred, please enter a value for Cd_0: ')
+
+    print(f'\nThe value for Cd_0 is: {cd_0}')
+
+    print(f'\n1: Calculate a new Cl\n2: Use a stored value for Cl\n3: Enter a custom value for Cl')
+    cl_choice = get_menu_input('\nSelect one: ', 3)
+    if cl_choice == 1:
+        cl = cl_calculator()
+    if cl_choice == 2:
+        cl = get_value('C_l', stored_calculations.get('C_l'))
+        if cl is None:
+            print("No stored value found, running Cl calculator first: ")
+            cl = cl_calculator()
+    elif cl_choice == 3:
+        cl = get_float_input('\nEnter a value for Cl: ')
+    else:
+        cl = get_float_input('\nAn error occurred, please enter a value for Cl: ')
+    print(f'\nThe value for Cl is: {cl}')
+
+    print('\nNow calculating Cd:')
+    b = get_float_input('\nEnter your wingspan: ')
+    s = get_float_input('\nEnter your chord length: ')
+
+    span_eff_factor = get_float_input('\nEnter your span efficiency factor, e: ')
+
+    aspect_ratio = b**2 / s
+
+    k = 1 / (math.pi * span_eff_factor * aspect_ratio)
+    cd = cd_0 + (k * (cl**2))
+    return cd
+
+
+calc_dict = {1: "Cd,0", 2: "Cl", 3: "Cd"}
 
 stored_calculations = {}
 
@@ -207,7 +272,7 @@ while True:
         print(f'{calc}: {calc_dict[calc]}')
 
     calc_selection = get_menu_input("Select your calculator: ", len(calc_dict))
-    print(f'You have selected the {calc_dict[calc_selection]} calculator\n')
+    print(f'\nYou have selected the {calc_dict[calc_selection]} calculator')
 
     # Calculators:
 
@@ -256,10 +321,21 @@ while True:
         else:
             stored_calculations["C_l"].append(float(C_l))
 
-    if get_yes_no_selection("Would you like to use another calculator? y/n: "):
+    # Cd
+    if calc_selection == 3:
+        C_d = cd_calculator()
+        print(f'\n\nThe value of C_d is: {C_d}')
+
+        if "C_d" not in stored_calculations:  # no stored values yet
+            stored_calculations["C_d"] = [float(C_d)]
+        else:
+            stored_calculations["C_d"].append(float(C_d))
+
+    # ENDING PROGRAM PROCEDURE
+    if get_yes_no_selection("\nWould you like to use another calculator? y/n: "):
         continue
     else:
         print('\nThe final values for all used calculators were as follows: \n')
         for val in stored_calculations:
-            print(f'The value of {val} was {stored_calculations[val]}\n')
+            print(f'The value(s) of {val} were: {stored_calculations[val]}\n')
         break

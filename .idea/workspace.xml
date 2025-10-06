@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="313d7d37-abe9-4d6e-a639-6cc16be9a9ab" name="Changes" comment="Second Revision, 9/23/2025: Refined input error checking to improve maintainability." />
+    <list default="true" id="313d7d37-abe9-4d6e-a639-6cc16be9a9ab" name="Changes" comment="Fourth Revision, 10/6/2025: Added Cl Calculator and Stored Values to compare multiple configurations.">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -34,16 +37,16 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.Main.executor": "Run",
-    "Python.test.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "RV4",
-    "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.Main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;RV4&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;org.jetbrains.plugins.github.ui.GithubSettingsConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -109,6 +112,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="First Revision, 9/21/2025" />
     <MESSAGE value="Second Revision, 9/23/2025: Refined input error checking to improve maintainability." />
-    <option name="LAST_COMMIT_MESSAGE" value="Second Revision, 9/23/2025: Refined input error checking to improve maintainability." />
+    <MESSAGE value="Fourth Revision, 10/6/2025: Added Cl Calculator and Stored Values to compare multiple configurations." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fourth Revision, 10/6/2025: Added Cl Calculator and Stored Values to compare multiple configurations." />
   </component>
 </project>
