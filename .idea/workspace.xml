@@ -4,9 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="313d7d37-abe9-4d6e-a639-6cc16be9a9ab" name="Changes" comment="Fourth Revision, 10/6/2025: Added Cl Calculator and Stored Values to compare multiple configurations.">
+    <list default="true" id="313d7d37-abe9-4d6e-a639-6cc16be9a9ab" name="Changes" comment="RV5, 10/6/2025: Added Cd Calculator and stored value feature to allow users to calculate Cd_0 or Cl and use that value later, ex. in Cd calculation.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,7 +22,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$" value="RV4" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -37,16 +36,16 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.Main.executor&quot;: &quot;Run&quot;,
-    &quot;Python.test.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;RV4&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;org.jetbrains.plugins.github.ui.GithubSettingsConfigurable&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.Main.executor": "Run",
+    "Python.test.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "RV5",
+    "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable"
   }
-}</component>
+}]]></component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -95,7 +94,23 @@
       <option name="project" value="LOCAL" />
       <updated>1758649360139</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Second Revision, 9/23/2025: Refined input error checking to improve maintainability.">
+      <option name="closed" value="true" />
+      <created>1759776199532</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1759776199532</updated>
+    </task>
+    <task id="LOCAL-00006" summary="RV5, 10/6/2025: Added Cd Calculator and stored value feature to allow users to calculate Cd_0 or Cl and use that value later, ex. in Cd calculation.">
+      <option name="closed" value="true" />
+      <created>1759776511290</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1759776511290</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -111,8 +126,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="First Revision, 9/21/2025" />
-    <MESSAGE value="Second Revision, 9/23/2025: Refined input error checking to improve maintainability." />
     <MESSAGE value="Fourth Revision, 10/6/2025: Added Cl Calculator and Stored Values to compare multiple configurations." />
-    <option name="LAST_COMMIT_MESSAGE" value="Fourth Revision, 10/6/2025: Added Cl Calculator and Stored Values to compare multiple configurations." />
+    <MESSAGE value="RV5, 10/6/2025: Added Cd Calculator and stored value feature to allow users to calculate Cd_0 or Cl and use that value later, ex. in Cd calculation." />
+    <option name="LAST_COMMIT_MESSAGE" value="RV5, 10/6/2025: Added Cd Calculator and stored value feature to allow users to calculate Cd_0 or Cl and use that value later, ex. in Cd calculation." />
   </component>
 </project>
