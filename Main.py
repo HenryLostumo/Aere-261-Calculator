@@ -26,7 +26,7 @@ def get_menu_input(prompt, num_selections):
             print(f"Invalid input. Please enter a number, 1 to {num_selections}.")
 
 
-def get_yes_no_selection(prompt):
+def get_yes_no_selection(prompt):  # returns boolean
     while True:
         user_response = input(prompt).lower().strip()
         if user_response == 'y':
@@ -81,7 +81,13 @@ def s_wet_fuse(a_top, a_side):
     return 3.4 * ((a_top + a_side) / 2)
 
 
+# CALCULATOR MADE DURING PROJECT PART B
 def cd_0_calculator():
+
+    # Altitude Selection
+    user_altitude = get_float_input("Enter your altitude: ")
+    alt = Atmosphere(user_altitude)
+
     # C_f calculation
     print("\nNow gathering information for Reynolds Number: \n")
     velocity = get_float_input("Enter the free stream velocity: ")
@@ -168,70 +174,92 @@ def cd_0_calculator():
     return C_f * FF_c * Q_c * wet_area_ratio
 
 
+def cl_calculator():
+
+    # Altitude Selection
+    user_altitude = get_float_input("Enter your altitude: ")
+    alt = Atmosphere(user_altitude)
+
+    # Gather Aircraft Info
+    gross_weight = get_float_input('Enter the Gross Weight of the aircraft: ')
+    velocity = get_float_input('Enter the Velocity of the aircraft: ')
+    planform = get_float_input('Enter the Planform Area of the aircraft: ')
+
+    # Calculate Cl
+    cl = gross_weight / (.5 * alt.density * (velocity ** 2) * planform)
+    return cl
+
+
 calc_dict = {1: "Cd,0", 2: "Cl"}
+
+stored_calculations = {}
 
 print("\n\nWARNING: ALL UNITS MUST BE METRIC\n\n")  # std atm package only gives metric outputs and i aint doing allat
 time.sleep(1)
 
-# User Selection loops
+# main loop
+while True:
 
-# while True:
-#     try:
-#         raw_unit_selection = input("Enter 1 for Metric Units or 2 for English Units: ")
-#         int(raw_unit_selection)
-#     except ValueError:
-#         print('Invalid Selection')
-#     else:
-#         unit_selection = int(raw_unit_selection)
-#         if unit_selection == 1:
-#             print("Metric Units are Selected\n")
-#         else:
-#             print("English Units are Selected\n")
-#         break
+    # Calculator Selection
+    print('\nCurrent Calculators:')
 
-# Calculator Selection
+    for calc in calc_dict:
+        print(f'{calc}: {calc_dict[calc]}')
 
-print('\nCurrent Calculators:')
+    calc_selection = get_menu_input("Select your calculator: ", len(calc_dict))
+    print(f'You have selected the {calc_dict[calc_selection]} calculator\n')
 
-for calc in calc_dict:
-    print(f'{calc}: {calc_dict[calc]}')
+    # Calculators:
 
-calc_selection = get_menu_input("Select your calculator: ", len(calc_dict))
-print(f'You have selected the {calc_dict[calc_selection]} calculator\n')
+    # Cd,0
+    if calc_selection == 1:
 
-# Altitude Selection
+        cd_0_aircraft_dict = {}
 
-user_altitude = get_float_input("Enter your altitude: ")
-alt = Atmosphere(user_altitude)
-
-# Calculators:
-
-# Cd,0
-if calc_selection == 1:
-
-    cd_0_aircraft_dict = {}
-
-    while True:
-        component_name = input('\nEnter the name of the component: ')
-        Cd_0_c = cd_0_calculator()
-
-        print(f'\nThe value for Cd_0_{component_name} is {Cd_0_c}')
-
-        cd_0_aircraft_dict[component_name] = float(Cd_0_c)
-
-        if not get_yes_no_selection('\nWould you like to calculate Cd_0 for another component? (y/n): '):
-            break
-    while True:
-        if get_yes_no_selection('\nDo you want to enter additional, known component values for Cd_0? (y/n): '):
+        while True:
             component_name = input('\nEnter the name of the component: ')
-            Cd_0_c = get_float_input(f'\nEnter the value for Cd_0_{component_name}: ')
+            Cd_0_c = cd_0_calculator()
+
+            print(f'\nThe value for Cd_0_{component_name} is {Cd_0_c}')
 
             cd_0_aircraft_dict[component_name] = float(Cd_0_c)
+
+            if not get_yes_no_selection('\nWould you like to calculate Cd_0 for another component? (y/n): '):
+                break
+        while True:
+            if get_yes_no_selection('\nDo you want to enter additional, known component values for Cd_0? (y/n): '):
+                component_name = input('\nEnter the name of the component: ')
+                Cd_0_c = get_float_input(f'\nEnter the value for Cd_0_{component_name}: ')
+
+                cd_0_aircraft_dict[component_name] = float(Cd_0_c)
+            else:
+                break
+
+        for key in cd_0_aircraft_dict.keys():
+            print(f'\nCd_0_{key} = {cd_0_aircraft_dict[key]}')
+
+        cd_0_aircraft = sum((cd_0_aircraft_dict.values()))
+        print(f'\n\nThe value of Cd_0 for the entered components is: {cd_0_aircraft}')
+
+        if "Cd_0" not in stored_calculations:  # no stored values yet
+            stored_calculations["Cd_0"] = [float(cd_0_aircraft)]
         else:
-            break
+            stored_calculations["Cd_0"].append(float(cd_0_aircraft))
 
-    for key in cd_0_aircraft_dict.keys():
-        print(f'\nCd_0_{key} = {cd_0_aircraft_dict[key]}')
+    # Cl
+    if calc_selection == 2:
+        C_l = cl_calculator()
+        print(f'\n\nThe value of C_l is: {C_l}')
 
-    cd_0_aircraft = sum((cd_0_aircraft_dict.values()))
-    print(f'\n\nThe value of Cd_0 for the entered components is: {cd_0_aircraft}')
+        if "C_l" not in stored_calculations:  # no stored values yet
+            stored_calculations["C_l"] = [float(C_l)]
+        else:
+            stored_calculations["C_l"].append(float(C_l))
+
+    if get_yes_no_selection("Would you like to use another calculator? y/n: "):
+        continue
+    else:
+        print('\nThe final values for all used calculators were as follows: \n')
+        for val in stored_calculations:
+            print(f'The value of {val} was {stored_calculations[val]}\n')
+        break

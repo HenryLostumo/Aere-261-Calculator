@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="313d7d37-abe9-4d6e-a639-6cc16be9a9ab" name="Changes" comment="Second Revision, 9/23/2025: Refined input error checking to improve maintainability.">
+    <list default="true" id="313d7d37-abe9-4d6e-a639-6cc16be9a9ab" name="Changes" comment="Third Revision, 9/23/2025: Improved maintainability rewriting calculators as functions and added features to calculate cd_0 for entire aircraft.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
     </list>
@@ -90,12 +90,21 @@
       <option name="project" value="LOCAL" />
       <updated>1758649360139</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Third Revision, 9/23/2025: Improved maintainability rewriting calculators as functions and added features to calculate cd_0 for entire aircraft.">
+      <option name="closed" value="true" />
+      <created>1758653484827</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1758653484827</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="First Revision, 9/21/2025" />
     <MESSAGE value="Second Revision, 9/23/2025: Refined input error checking to improve maintainability." />
-    <option name="LAST_COMMIT_MESSAGE" value="Second Revision, 9/23/2025: Refined input error checking to improve maintainability." />
+    <MESSAGE value="Third Revision, 9/23/2025: Improved maintainability rewriting calculators as functions and added features to calculate cd_0 for entire aircraft." />
+    <option name="LAST_COMMIT_MESSAGE" value="Third Revision, 9/23/2025: Improved maintainability rewriting calculators as functions and added features to calculate cd_0 for entire aircraft." />
   </component>
 </project>
