@@ -363,13 +363,13 @@ def rate_of_climb_calculator():
 
     plt.show()
 
-    # Plot V_(r/c) for a constant velocity
+    # Plot Rate of Climb for a constant velocity. (R/C)Cruise
     plt.figure()
     plt.plot(h,
              np.array(
                  [(((P_A * n * (density(h_i) / density(0))) -
                     (t_r_const(h_i, K, Cd_0, W, S, v_cruise) * v_cruise)) / W) for h_i in h]),
-             color='gray', label='V_(r/c)')
+             color='gray', label='(R/C)Cruise')
     plt.xlabel('Altitude (m)')
     plt.ylabel('Velocity (m/s)')
     plt.title('Rate of Climb at Constant Cruise Velocity')
@@ -478,6 +478,29 @@ def rate_of_climb_calculator():
     plt.ylim(0)
     plt.grid()
     plt.show()
+
+    # Plot of (R/C)max and (R/C)Cruise
+    plt.figure()
+
+    plt.plot(h, RC_vals,
+             color='blue', label='(R/C)Max')
+    plt.xlabel('Altitude (m)')
+    plt.ylabel('Velocity (m/s)')
+
+    plt.plot(h,
+             np.array(
+                 [(((P_A * n * (density(h_i) / density(0))) -
+                    (t_r_const(h_i, K, Cd_0, W, S, v_cruise) * v_cruise)) / W) for h_i in h]),
+             color='gray', label='(R/C)Cruise')
+    plt.xlabel('Altitude (m)')
+    plt.ylabel('Velocity (m/s)')
+
+    plt.title('Rate of Climb Max vs Altitude')
+    plt.legend()
+    plt.ylim(0)
+    plt.grid()
+    plt.show()
+
 
     return abs_ceiling, serv_ceiling
 
