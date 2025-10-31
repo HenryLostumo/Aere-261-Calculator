@@ -2,8 +2,9 @@
 
 import math
 import time
-
 from ambiance import Atmosphere
+from matplotlib import pyplot as plt
+import numpy as np
 
 
 def get_float_input(prompt):
@@ -38,7 +39,6 @@ def get_yes_no_selection(prompt):  # returns boolean
 
 
 def get_value(name, value):
-
     # no value
     if value is None:
         return None
@@ -99,9 +99,55 @@ def s_wet_fuse(a_top, a_side):
     return 3.4 * ((a_top + a_side) / 2)
 
 
+# functions for basic equations of standard atmosphere
+def alt_vari(alt):
+    # define region variables. could add the other regions and metric vs english units, but not necessary for project
+    regions = [
+        (0, 11000, {'lapse_rate': -6.5e-3, 't_base': 288.16, 'h_base': 0,
+                    'p_base': 101325, 'density_base': 1.225, 'g': 9.81, 'R': 287}
+         )
+    ]
+    for alt_lower_limit, alt_upper_limit, region_variables in regions:
+        if alt_lower_limit <= alt <= alt_upper_limit:
+            return region_variables
+
+
+def temp(alt):
+    region_variables = alt_vari(alt)  # gather region variables
+
+    return region_variables['t_base'] + (region_variables['lapse_rate'] * (alt - region_variables['h_base']))
+
+
+def pres(alt):
+    region_variables = alt_vari(alt)  # gather region variables
+
+    return (region_variables['p_base'] * ((temp(alt) / region_variables['t_base'])
+                                          ** ((-1 * region_variables['g']) / (
+                    region_variables['lapse_rate'] * region_variables['R']))))
+
+
+def density(alt):
+    region_variables = alt_vari(alt)  # gather region variables
+
+    return pres(alt) / (region_variables['R'] * temp(alt))
+
+
+def v_rc(alt, K, Cd_0, W, S):
+    return ((2 / density(alt)) * ((K / (3 * Cd_0)) ** (1 / 2)) * (W / S)) ** (1 / 2)
+
+
+def t_r(alt, K, Cd_0, W, S):
+    return (((1 / 2) * density(alt) * ((v_rc(alt, K, Cd_0, W, S)) ** 2) * S * Cd_0)
+            + ((2 * K * (W ** 2)) / (density(alt) * (v_rc(alt, K, Cd_0, W, S) ** 2) * S)))
+
+
+def t_r_const(alt, K, Cd_0, W, S, v):
+    return (((1 / 2) * density(alt) * (v ** 2) * S * Cd_0)
+            + ((2 * K * (W ** 2)) / (density(alt) * v**2 * S)))
+
+
 # CALCULATOR MADE DURING PROJECT PART B
 def cd_0_calculator():
-
     # Altitude Selection
     user_altitude = get_float_input("Enter your altitude: ")
     alt = Atmosphere(user_altitude)
@@ -194,7 +240,6 @@ def cd_0_calculator():
 
 # CALCULATOR MADE DURING PROJECT PART C
 def cl_calculator():
-
     # Altitude Selection
     user_altitude = get_float_input("\nEnter your altitude: ")
     alt = Atmosphere(user_altitude)
@@ -248,14 +293,196 @@ def cd_calculator():
 
     span_eff_factor = get_float_input('\nEnter your span efficiency factor, e: ')
 
-    aspect_ratio = b**2 / s
+    aspect_ratio = b ** 2 / s
 
     k = 1 / (math.pi * span_eff_factor * aspect_ratio)
-    cd = cd_0 + (k * (cl**2))
+    cd = cd_0 + (k * (cl ** 2))
     return cd
 
 
-calc_dict = {1: "Cd,0", 2: "Cl", 3: "Cd"}
+# Calculator for Project Part E
+def rate_of_climb_calculator():
+    # aircraft specifications
+    W = get_float_input("Enter the Weight, in Newtons: ")
+    S = get_float_input("Enter the Planform Area: ")
+    Cl_max = get_float_input("Enter CL_max: ")
+    K = get_float_input("Enter a value for K: ")
+    Cd_0 = get_float_input("Enter a value for Cd_0: ")
+    n = get_float_input("Enter a value for Prop Efficiency, n: ")
+    P_A = get_float_input("Enter a value for Power Available in Watts: ")
+
+    v_cruise = get_float_input("Enter a value for Cruise Velocity: ")  # used for constant Vel calculations
+
+    h = np.arange(11001)  # 0 to 11 km w/ 1 meter increments
+
+    # Plotting temp, pressure, and density from 0 to 11 km w/ d_m = 1 meter
+
+    # # TEMPERATURE PLOT
+    # plt.figure()
+    # plt.plot(np.array([temp(h_i) for h_i in h]), h)
+    # plt.xlabel('Temperature (K)')
+    # plt.ylabel('Altitude (m)')
+    # plt.title('Altitude vs Temperature')
+    # plt.grid()
+    #
+    # # PRESSURE PLOT
+    # plt.figure()
+    # plt.plot(np.array([pres(h_i) for h_i in h]), h)
+    # plt.xlabel('Pressure (Pa)')
+    # plt.ylabel('Altitude (m)')
+    # plt.title('Altitude vs Pressure')
+    # plt.grid()
+    #
+    # # DENSITY PLOT
+    # plt.figure()
+    # plt.plot(np.array([density(h_i) for h_i in h]), h)
+    # plt.xlabel('Density (Kg/m^3)')
+    # plt.ylabel('Altitude (m)')
+    # plt.title('Altitude vs Density')
+    # plt.grid()
+    #
+    # plt.show()
+
+    # Plot Power Required, Power Available, Excess Power for a constant velocity
+    plt.figure()
+    plt.plot(h, np.array([(((t_r_const(h_i, K, Cd_0, W, S, v_cruise)) * v_cruise) / 1000) for h_i in h]),
+             label='Power Required', color='orange')
+    plt.plot(h, np.array([((P_A * n * (density(h_i) / density(0))) / 1000) for h_i in h]),
+             label='Power Available', color='blue')
+    plt.plot(h,
+             np.array(
+                 [(((P_A * n * (density(h_i) / density(0))) / 1000) -
+                   ((t_r_const(h_i, K, Cd_0, W, S, v_cruise) * v_cruise) / 1000)) for h_i in h]),
+             color='gray', label='Excess Power')
+    plt.xlabel('Altitude (m)')
+    plt.ylabel('Power (kW)')
+    plt.title('Constant Cruise Velocity Power Curves vs Altitude')
+    plt.legend()
+    plt.ylim(0)
+    plt.grid()
+
+    plt.show()
+
+    # Plot V_(r/c) for a constant velocity
+    plt.figure()
+    plt.plot(h,
+             np.array(
+                 [(((P_A * n * (density(h_i) / density(0))) -
+                    (t_r_const(h_i, K, Cd_0, W, S, v_cruise) * v_cruise)) / W) for h_i in h]),
+             color='gray', label='V_(r/c)')
+    plt.xlabel('Altitude (m)')
+    plt.ylabel('Velocity (m/s)')
+    plt.title('Rate of Climb at Constant Cruise Velocity')
+    plt.legend()
+    plt.ylim(0)
+    plt.grid()
+
+    plt.show()
+
+    # Plot V_stall and V_(r/c)max then overlay the plot
+
+    # Standalone plot of V_stall vs altitude
+    plt.figure()
+    plt.plot(h, np.array([(((2 / density(h_i)) * (W / S) * (1 / Cl_max)) ** (1 / 2)) for h_i in h]))
+    plt.xlabel('Altitude (m)')
+    plt.ylabel('Velocity (m/s)')
+    plt.title('V_stall vs Altitude')
+    plt.grid()
+
+    # Standalone plot of V_(r/c)max
+    plt.figure()
+    plt.plot(h, np.array([v_rc(h_i, K, Cd_0, W, S) for h_i in h]), color='orange', label='V_(r/c)max')
+    plt.xlabel('Altitude (m)')
+    plt.ylabel('Velocity (m/s)')
+    plt.title('V_(r/c)max vs Altitude')
+    plt.legend()
+    plt.grid()
+
+    # Plot of V_stall and V_(r/c)max
+    plt.figure()
+    plt.plot(h, np.array([(((2 / density(h_i)) * (W / S) * (1 / Cl_max)) ** (1 / 2)) for h_i in h]), label='V_stall')
+    plt.plot(h, np.array([v_rc(h_i, K, Cd_0, W, S) for h_i in h]), color='orange', label='V_(r/c)max')
+    plt.xlabel('Altitude (m)')
+    plt.ylabel('Velocity (m/s)')
+    plt.title('V_stall and V_(r/c)max vs Altitude')
+    plt.legend()
+    plt.grid()
+
+    plt.show()
+
+    # Plot P_r, then P_r and P_A on one plot, then plot excess power, P_r, and P_A on one plot
+
+    # Plot of Power Required Only
+    plt.figure()
+    plt.plot(h, np.array([((t_r(h_i, K, Cd_0, W, S) * v_rc(h_i, K, Cd_0, W, S)) / 1000) for h_i in h]))
+    plt.xlabel('Altitude (m)')
+    plt.ylabel('Power Required (kW)')
+    plt.title('Power Required vs Altitude')
+    plt.legend()
+    plt.grid()
+
+    # Plot of Power Required and Power Available
+    plt.figure()
+    plt.plot(h, np.array([((t_r(h_i, K, Cd_0, W, S) * v_rc(h_i, K, Cd_0, W, S)) / 1000) for h_i in h]),
+             color='orange', label='Power Required')
+    plt.plot(h, np.array([((P_A * n * (density(h_i) / density(0))) / 1000) for h_i in h]),
+             label='Power Available')
+    plt.xlabel('Altitude (m)')
+    plt.ylabel('Power (kW)')
+    plt.title('Power Curves vs Altitude')
+    plt.legend()
+    plt.ylim(0)
+    plt.grid()
+
+    # Plot of Power Required, Power Available, and Excess Power
+    plt.figure()
+    plt.plot(h, np.array([((t_r(h_i, K, Cd_0, W, S) * v_rc(h_i, K, Cd_0, W, S)) / 1000) for h_i in h]),
+             color='orange', label='Power Required')
+    plt.plot(h, np.array([((P_A * n * (density(h_i) / density(0))) / 1000) for h_i in h]),
+             label='Power Available')
+    plt.plot(h,
+             np.array(
+                 [(((P_A * n * (density(h_i) / density(0))) / 1000) -
+                   ((t_r(h_i, K, Cd_0, W, S) * v_rc(h_i, K, Cd_0, W, S)) / 1000)) for h_i in h]),
+             color='gray', label='Excess Power')
+    plt.xlabel('Altitude (m)')
+    plt.ylabel('Power (kW)')
+    plt.title('Variable Velocity Power Curves vs Altitude')
+    plt.legend()
+    plt.ylim(0)
+    plt.grid()
+
+    plt.show()
+
+    # Plot (R/C)max from sea level to (R/C)max = 0 then identify the service and absolute ceilings
+    RC_vals = np.array(([(((P_A * n * (density(h_i) / density(0))) -
+                           (t_r(h_i, K, Cd_0, W, S) * v_rc(h_i, K, Cd_0, W, S))) / W) for h_i in h]))
+
+    # determine the ceilings
+    abs_ceiling = np.where(RC_vals <= 0)[0][0]
+    serv_ceiling = np.where(RC_vals <= 0.508)[0][0]
+    print(f'The service ceiling is {serv_ceiling}')
+    print(f'The absolute ceiling is {abs_ceiling}')
+
+    # Plot of (R/C)max
+
+    plt.figure()
+    plt.plot(h, RC_vals,
+             color='blue', label='Rate of Climb Max')
+    plt.axvline(x=serv_ceiling, color='gray', label=f'Service Ceiling')
+    plt.axvline(x=abs_ceiling, color='orange', label='Absolute Ceiling')
+    plt.xlabel('Altitude (m)')
+    plt.ylabel('Velocity (m/s)')
+    plt.title('Rate of Climb Max vs Altitude')
+    plt.legend()
+    plt.ylim(0)
+    plt.grid()
+    plt.show()
+
+    return abs_ceiling, serv_ceiling
+
+
+calc_dict = {1: "Cd,0", 2: "Cl", 3: "Cd", 4: "Rate Of Climb Plots and Operating Ceilings"}
 
 stored_calculations = {}
 
@@ -330,6 +557,9 @@ while True:
             stored_calculations["C_d"] = [float(C_d)]
         else:
             stored_calculations["C_d"].append(float(C_d))
+
+    if calc_selection == 4:
+        (abs_ceiling, serv_ceiling) = rate_of_climb_calculator()
 
     # ENDING PROGRAM PROCEDURE
     if get_yes_no_selection("\nWould you like to use another calculator? y/n: "):
