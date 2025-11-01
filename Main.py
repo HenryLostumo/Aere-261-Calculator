@@ -143,7 +143,7 @@ def t_r(alt, K, Cd_0, W, S):
 
 def t_r_const(alt, K, Cd_0, W, S, v):
     return (((1 / 2) * density(alt) * (v ** 2) * S * Cd_0)
-            + ((2 * K * (W ** 2)) / (density(alt) * v**2 * S)))
+            + ((2 * K * (W ** 2)) / (density(alt) * v ** 2 * S)))
 
 
 # CALCULATOR MADE DURING PROJECT PART B
@@ -501,6 +501,20 @@ def rate_of_climb_calculator():
     plt.grid()
     plt.show()
 
+    # Plot of Pr_(R/C)max and Pr_Cruise
+    plt.figure()
+    plt.plot(h, np.array([((t_r(h_i, K, Cd_0, W, S) * v_rc(h_i, K, Cd_0, W, S)) / 1000) for h_i in h]),
+             color='Green', label='Pr_(R/C)max')
+    plt.plot(h, np.array([(((t_r_const(h_i, K, Cd_0, W, S, v_cruise)) * v_cruise) / 1000) for h_i in h]),
+             label='Pr_Cruise', color='Red')
+    plt.xlabel('Altitude (m)')
+    plt.ylabel('Power (kW)')
+
+    plt.title('Power Required Curves vs Altitude')
+    plt.legend()
+    plt.ylim(0)
+    plt.grid()
+    plt.show()
 
     return abs_ceiling, serv_ceiling
 
