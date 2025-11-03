@@ -17,7 +17,7 @@ POLAR_500K = "xf-naca4415-il-500000.csv"
 POLAR_1M   = "xf-naca4415-il-1000000.csv"
 
 # -----------------------
-# AIRCRAFT & ENVIRONMENT
+# AIRCRAFT & ENVIRONMENT BASED ON THE Aerosonde Mk 4.7J and Boeing Insitu ScanEagle
 # -----------------------
 W = 220          # N
 P_engine = 5000   # W (shaft power)
@@ -87,9 +87,9 @@ Re_low, Re_high = 5e5, 1e6
 # -----------------------
 # SWEEP PARAMETERS
 # -----------------------
-root_chords = np.linspace(0, .5, 25)  # m
-span_vals   = np.linspace(0, 5, 25)   # m
-taper_vals  = np.linspace(0, .3, 25)    # c_t / c_r
+root_chords = np.linspace(0, 1, 25)  # m
+span_vals   = np.linspace(0, 3.5, 25)   # m
+taper_vals  = np.linspace(0, 1, 25)    # c_t / c_r
 
 # -----------------------
 # HELPER FUNCTIONS
