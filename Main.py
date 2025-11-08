@@ -519,7 +519,63 @@ def rate_of_climb_calculator():
     return abs_ceiling, serv_ceiling
 
 
-calc_dict = {1: "Cd,0", 2: "Cl", 3: "Cd", 4: "Rate Of Climb Plots and Operating Ceilings"}
+# Calculator for Project Part F
+def maneuvers():
+    # Altitude Selection
+    user_altitude = get_float_input("\nEnter your altitude: ")
+    alt = Atmosphere(user_altitude)
+
+    # Gather Aircraft Info
+    gross_weight = get_float_input('\nEnter the Gross Weight of the aircraft: ')
+    velocity = get_float_input('\nEnter the Cruise Velocity of the aircraft: ')
+    planform = get_float_input('\nEnter the Planform Area of the aircraft: ')
+    n_lower = get_float_input('\nEnter the Lower Structural Load Factor: ')
+    n_upper = get_float_input('\nEnter the Upper Structural Load Factor: ')
+
+    cl_min = get_float_input('\nEnter the Min Coefficient of Lift: ')
+    cl_max = get_float_input('\nEnter the Max Coefficient of Lift: ')
+
+    lift_min = cl_min * .5 * alt.density * velocity**2 * planform
+    lift_max = cl_max * .5 * alt.density * velocity**2 * planform
+
+    n_aero_min = lift_min/gross_weight
+    n_aero_max = lift_max/gross_weight
+
+    print(f'\nThe Aerodynamic Load Factor, n, is: {n_aero_max}')
+
+    # Calculate Pull-Up Radii
+    #pullup_rad_aero_min = ((gross_weight/9.81) * velocity**2) / (lift_min - gross_weight)
+    pullup_rad_aero_max = (velocity ** 2) / (9.81 * (n_aero_max - 1))
+    #pullup_rad_struct_lower = velocity**2 / (9.81 * (n_lower - 1))
+    pullup_rad_struct_upper = (velocity ** 2) / (9.81 * (n_upper - 1))
+
+    # Calculate Level-Turn Radii
+    #levelturn_rad_aero_min = velocity ** 2 / (9.81 * (((n_aero_min ** 2) - 1) ** (1 / 2)))
+    levelturn_rad_aero_max = velocity ** 2 / (9.81 * (((n_aero_max**2) - 1) ** (1/2)))
+    #levelturn_rad_struct_lower = velocity ** 2 / (9.81 * (((n_lower**2) - 1) ** (1/2)))
+    levelturn_rad_struct_upper = velocity ** 2 / (9.81 * (((n_upper**2) - 1) ** (1/2)))
+
+    pullup_limit = "Structural" if pullup_rad_struct_upper > pullup_rad_aero_max else "Aerodynamic"
+    levelturn_limit = "Structural" if levelturn_rad_struct_upper > levelturn_rad_aero_max else "Aerodynamic"
+
+    v_star = ((2 * gross_weight * n_upper) / (alt.density * planform * cl_max)) ** 0.5
+    above_below = "above" if velocity > v_star else "below"
+
+    print("\nPull-Up Radii:")
+    print(f"  Structural Limit (Upper): {pullup_rad_struct_upper:} m")
+    print(f"  Aerodynamic Limit (Upper): {pullup_rad_aero_max:} m")
+    print(f"  Limiting Case: {pullup_limit}")
+
+    print("\nLevel Turn Radii:")
+    print(f"  Structural Limit (Upper): {levelturn_rad_struct_upper:} m")
+    print(f"  Aerodynamic Limit (Upper): {levelturn_rad_aero_max:} m")
+    print(f"  Limiting Case: {levelturn_limit}")
+
+    print(f"\nManeuvering Speed (V*): {v_star:} m/s")
+    print(f"Cruise Velocity ({velocity:} m/s) is {above_below} V*")
+
+
+calc_dict = {1: "Cd,0", 2: "Cl", 3: "Cd", 4: "Rate Of Climb Plots and Operating Ceilings", 5: "Maneuvers"}
 
 stored_calculations = {}
 
@@ -597,6 +653,9 @@ while True:
 
     if calc_selection == 4:
         (abs_ceiling, serv_ceiling) = rate_of_climb_calculator()
+
+    if calc_selection == 5:
+        maneuvers()
 
     # ENDING PROGRAM PROCEDURE
     if get_yes_no_selection("\nWould you like to use another calculator? y/n: "):
