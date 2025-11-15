@@ -575,7 +575,124 @@ def maneuvers():
     print(f"Cruise Velocity ({velocity:} m/s) is {above_below} V*")
 
 
-calc_dict = {1: "Cd,0", 2: "Cl", 3: "Cd", 4: "Rate Of Climb Plots and Operating Ceilings", 5: "Maneuvers"}
+# PROJECT PART G
+def takeoff_and_landing_calculator():
+    from ambiance import Atmosphere
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    user_altitude = 583.4#get_float_input("\nEnter the Airport's altitude: ")
+    alt = Atmosphere(user_altitude)
+
+    weight = 269.775#get_float_input("Enter the Aircraft's Weight: ")
+    mass = weight / 9.81
+
+    planform = .9#get_float_input("Enter the Planform Area: ")
+    CL_max = 1.41#get_float_input("Enter CL_max: ")
+    CL_rolling = .49#get_float_input("Enter CL_rolling: ")
+    CD_0 = .01851#get_float_input("Enter CD_0: ")
+    k = .045#get_float_input("Enter value of k: ")
+
+    power_available = 3 * .9 * ((alt.density / 1.225)) #get_float_input("Enter the Power Available in kW: ")
+
+    mu_rolling = .04#get_float_input("Enter the Rolling Friction (typ 0.03 - 0.05): ")
+    mu_braking = .4#get_float_input("Enter the Braking Friction (typ 0.3 - 0.5): ")
+    n_flare = 1.1#get_float_input("Enter the Flare Load Factor: ")
+    gamma = 4#get_float_input("Enter the Climb Angle (deg): ")
+    obstacle_height = 15.24#get_float_input("Enter the Obstacle Height (15.24 m typ): ")
+    approach_angle = 5.71#get_float_input("Enter the Approach Angle (deg): ")
+
+    rho = alt.density
+    v_stall = np.sqrt((2 * weight) / (rho * planform * CL_max))
+    v_liftoff = 1.2 * v_stall
+    v_inf_takeoff = 0.7 * v_liftoff
+
+    thrust = (power_available * 1000) / v_inf_takeoff
+    print(f"\nThrust available: {thrust} N")
+
+    drag_liftoff = 0.5 * rho * v_inf_takeoff**2 * planform * (CD_0 + k * CL_rolling**2)
+    lift_liftoff = 0.5 * rho * v_inf_takeoff**2 * planform * CL_rolling
+
+    dis_ground_takeoff = (1.44 * (weight / planform)) / (9.81 * rho * CL_max *
+                      ((thrust / weight) - (drag_liftoff / weight) -
+                      mu_rolling * (1 - lift_liftoff / weight)))
+
+    R_transition = (v_liftoff**2) / ((n_flare - 1) * 9.81)
+    h_transition = R_transition * (1 - np.cos(np.radians(gamma)))
+    dis_transition_takeoff = R_transition * np.sin(np.radians(gamma))
+
+    dis_climb_takeoff = max(0, (obstacle_height - h_transition) / np.tan(np.radians(gamma)))
+
+    dis_takeoff = dis_ground_takeoff + dis_transition_takeoff + dis_climb_takeoff
+    print(f"Minimum TAKEOFF distance: {dis_takeoff} m")
+
+    v_touchdown = 1.3 * v_stall
+    v_inf_landing = 0.7 * v_touchdown
+
+    drag_landing = 0.5 * rho * v_inf_landing**2 * planform * (CD_0 + k * CL_rolling**2)
+    lift_landing = 0.5 * rho * v_inf_landing**2 * planform * CL_rolling
+
+    dis_ground_landing = (1.69 * (weight / planform)) / (9.81 * rho * CL_max *
+                          ((drag_landing / weight) + mu_braking * (1 - lift_landing/weight)))
+
+    R_flare = (v_touchdown**2) / ((n_flare - 1) * 9.81)
+    h_flare = R_flare * (1 - np.cos(np.radians(approach_angle)))
+    dis_flare_landing = R_flare * np.sin(np.radians(approach_angle))
+
+    dis_approach_landing = max(0, (obstacle_height - h_flare) / np.tan(np.radians(approach_angle)))
+
+    dis_landing = dis_ground_landing + dis_flare_landing + dis_approach_landing
+    print(f"Minimum LANDING distance: {dis_landing} m")
+
+    # grafin
+    x_ground = np.linspace(0, dis_ground_takeoff, 200)
+    y_ground = np.zeros_like(x_ground)
+
+    theta = np.linspace(0, np.radians(gamma), 100)
+    x_transition = dis_ground_takeoff + R_transition * np.sin(theta)
+    y_transition = R_transition * (1 - np.cos(theta))
+
+    x_climb = np.linspace(x_transition[-1],
+                          x_transition[-1] + dis_climb_takeoff,
+                          200)
+    y_climb = y_transition[-1] + np.tan(np.radians(gamma)) * (x_climb - x_transition[-1])
+
+    plt.figure(figsize=(10,6))
+    plt.plot(x_ground, y_ground, label="Ground Roll")
+    plt.plot(x_transition, y_transition, label="Transition Arc")
+    plt.plot(x_climb, y_climb, label="Climb")
+    plt.axhline(obstacle_height, color='r', linestyle='--', label="Obstacle Height")
+    plt.title("Takeoff Trajectory")
+    plt.xlabel("Distance (m)")
+    plt.ylabel("Height (m)")
+    plt.grid()
+    plt.legend()
+
+    x_approach = np.linspace(0, dis_approach_landing, 200)
+    y_approach = obstacle_height - np.tan(np.radians(approach_angle)) * x_approach
+
+    theta2 = np.linspace(0, np.radians(approach_angle), 100)
+    x_flare = dis_approach_landing + ((-R_flare) * np.sin(theta2)) + dis_flare_landing
+    y_flare = R_flare * (1 - np.cos(theta2))
+
+    x_landing_ground = np.linspace(dis_approach_landing + dis_flare_landing, dis_approach_landing + dis_flare_landing + dis_ground_landing, 200)
+    y_landing_ground = np.zeros_like(x_landing_ground)
+
+    plt.figure(figsize=(10, 6))
+    plt.plot(x_approach, y_approach, label="Approach")
+    plt.plot(x_flare, y_flare, label="Flare Arc")
+    plt.plot(x_landing_ground, y_landing_ground, label="Ground Roll")
+    plt.axhline(obstacle_height, linestyle="--", color="r", label="Obstacle Height")
+    plt.title("Landing Trajectory")
+    plt.xlabel("Distance (m)")
+    plt.ylabel("Height (m)")
+    plt.grid()
+    plt.legend()
+    plt.show()
+
+
+calc_dict = {1: "Cd,0", 2: "Cl", 3: "Cd", 4: "Rate Of Climb Plots and Operating Ceilings", 5: "Maneuvers",
+             6: "Takeoff and Landing"}
 
 stored_calculations = {}
 
@@ -591,7 +708,7 @@ while True:
     for calc in calc_dict:
         print(f'{calc}: {calc_dict[calc]}')
 
-    calc_selection = get_menu_input("Select your calculator: ", len(calc_dict))
+    calc_selection = get_menu_input("\nSelect your calculator: ", len(calc_dict))
     print(f'\nYou have selected the {calc_dict[calc_selection]} calculator')
 
     # Calculators:
@@ -656,6 +773,9 @@ while True:
 
     if calc_selection == 5:
         maneuvers()
+
+    if calc_selection == 6:
+        takeoff_and_landing_calculator()
 
     # ENDING PROGRAM PROCEDURE
     if get_yes_no_selection("\nWould you like to use another calculator? y/n: "):

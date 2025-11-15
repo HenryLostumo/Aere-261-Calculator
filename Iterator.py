@@ -14,14 +14,16 @@ import matplotlib.pyplot as plt
 # -----------------------
 # INPUT POLAR FILES
 # -----------------------
-POLAR_500K = "xf-naca4415-il-500000.csv"
-POLAR_1M   = "xf-naca4415-il-1000000.csv"
+#POLAR_500K = "xf-naca4415-il-500000.csv"
+#POLAR_1M   = "xf-naca4415-il-1000000.csv"
+POLAR_500K = "xf-sg6043-il-500000.csv"
+POLAR_1M   = "xf-sg6043-il-1000000.csv"
 
 # -----------------------
 # AIRCRAFT & ENVIRONMENT
 # -----------------------
-W = 343.35          # N
-P_engine = 5000   # W (shaft power)
+W = 294.3          # N
+P_engine = 3000   # W (shaft power)
 eta = 0.9         # prop efficiency
 m = 1.0           # power altitude exponent
 alt_cruise = 2026.92  # m
@@ -93,8 +95,8 @@ Re_low, Re_high = 5e5, 1e6
 # -----------------------
 # SWEEP PARAMETERS
 # -----------------------
-chord_vals = np.arange(0.3, .5, 0.025)
-span_vals  = np.arange(0.10, 3.6, 0.1)
+chord_vals = np.arange(0.25, .325, 0.025)
+span_vals  = np.arange(0.10, 3.1, 0.1)
 
 def K_from_AR(AR, e): return 1.0 / (math.pi * e * AR)
 
@@ -171,7 +173,7 @@ for c in chord_vals:
         if CL_req > CL3: continue
         Vstall = math.sqrt((2 * W) / (rho * S * CL3))
         endurance_ratio = Vend / Vstall
-        if endurance_ratio < 1.0: continue
+        if endurance_ratio < 1: continue
         # power calcs
         Dp = 0.5 * rho * Vend**2 * S * CD0
         Di = 2 * K * W**2 / (rho * Vend**2 * S)
