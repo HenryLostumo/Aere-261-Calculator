@@ -692,12 +692,45 @@ def takeoff_and_landing_calculator():
 
 
 calc_dict = {1: "Cd,0", 2: "Cl", 3: "Cd", 4: "Rate Of Climb Plots and Operating Ceilings", 5: "Maneuvers",
-             6: "Takeoff and Landing"}
+             6: "Takeoff and Landing", 7: "Range and Endurance"}
 
 stored_calculations = {}
 
 print("\n\nWARNING: ALL UNITS MUST BE METRIC\n\n")  # std atm package only gives metric outputs and i aint doing allat
 time.sleep(1)
+
+def range_and_endurance_calculator():
+    user_altitude = 2331.72
+    alt = Atmosphere(user_altitude)
+
+    CD_0 = 0.01851
+    CL_max = 1.41
+    k = 0.45
+    bsfc = 9.7612e-7 # Wf dot / P ((Kg/s)/Watt); for Lycoming: ((0.48[kg/hr] * 9.81[m^2/sec]) / 3600[sec]) / 1340[Watts]
+    fuel_mass = 5 # [kg] or 3.56 US gallons
+    fuel_weight = fuel_mass * 9.81
+    gtow = 269.775
+    eta = 0.9
+    planform = 0.9
+
+    CL_three_halves_to_CD = 0.25 * ((3 / (k * (CD_0 ** (1 / 3)))) ** (3 / 4))
+    CL_to_CD = (1 / (4 * k * CD_0)) ** (1 / 2)
+
+    v_stall = ((2 * gtow ) / (alt.density * planform * CL_max)) ** (1/2)
+    print(f'The Stall Velocity is {v_stall}\n')
+
+    max_endurance = ((eta / bsfc) * ((2 * alt.density * planform) ** (1 / 2)) * CL_three_halves_to_CD
+                     * (((gtow - fuel_weight) ** (-1 / 2)) - (gtow ** (-1 / 2))))
+    vel_max_endurance = ((2 / alt.density) * (gtow / planform) * ((k / (3 * CD_0)) ** (1 / 2))) ** (1 / 2)
+    print(f'The Max Endurance is {max_endurance / 3600} hours')
+    print(f'The Velocity for Max Endurance is {vel_max_endurance}\n')
+
+    max_range = (eta / bsfc) * CL_to_CD * math.log(gtow / (gtow - fuel_weight))
+    vel_max_range = ((2 / alt.density) * (gtow / planform) * ((k / CD_0) ** (1 / 2))) ** (1 / 2)
+    print(f'The Max Range is {max_range / 1000} km')
+    print(f'The Velocity for Max Range is {vel_max_range}')
+
+
 
 # main loop
 while True:
@@ -776,6 +809,9 @@ while True:
 
     if calc_selection == 6:
         takeoff_and_landing_calculator()
+
+    if calc_selection == 7:
+        range_and_endurance_calculator()
 
     # ENDING PROGRAM PROCEDURE
     if get_yes_no_selection("\nWould you like to use another calculator? y/n: "):
