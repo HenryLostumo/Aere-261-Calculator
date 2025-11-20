@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="313d7d37-abe9-4d6e-a639-6cc16be9a9ab" name="Changes" comment="RV1 Wing Sizing Optimizer">
+    <list default="true" id="313d7d37-abe9-4d6e-a639-6cc16be9a9ab" name="Changes" comment="RV 9: Added missing range and endurance code">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
     </list>
@@ -150,7 +150,15 @@
       <option name="project" value="LOCAL" />
       <updated>1762200505420</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="RV 9: Added missing range and endurance code">
+      <option name="closed" value="true" />
+      <created>1763397871802</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1763397871802</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -183,6 +191,7 @@
     <MESSAGE value="RV5, 10/6/2025: Added Cd Calculator and stored value feature to allow users to calculate Cd_0 or Cl and use that value later, ex. use Cd_0 in Cd calculation." />
     <MESSAGE value="RV6, 10/31/2025: Added &quot;Rate Of Climb Plots and Operating Ceilings&quot; calculator for Project Part E by incorporating code from HW7, a nearly identical assignment." />
     <MESSAGE value="RV1 Wing Sizing Optimizer" />
-    <option name="LAST_COMMIT_MESSAGE" value="RV1 Wing Sizing Optimizer" />
+    <MESSAGE value="RV 9: Added missing range and endurance code" />
+    <option name="LAST_COMMIT_MESSAGE" value="RV 9: Added missing range and endurance code" />
   </component>
 </project>

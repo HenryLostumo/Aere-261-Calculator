@@ -303,15 +303,15 @@ def cd_calculator():
 # Calculator for Project Part E
 def rate_of_climb_calculator():
     # aircraft specifications
-    W = get_float_input("Enter the Weight, in Newtons: ")
-    S = get_float_input("Enter the Planform Area: ")
-    Cl_max = get_float_input("Enter CL_max: ")
-    K = get_float_input("Enter a value for K: ")
-    Cd_0 = get_float_input("Enter a value for Cd_0: ")
-    n = get_float_input("Enter a value for Prop Efficiency, n: ")
-    P_A = get_float_input("Enter a value for Power Available in Watts: ")
+    W = 294.3#get_float_input("Enter the Weight, in Newtons: ")
+    S = 1.05#get_float_input("Enter the Planform Area: ")
+    Cl_max = 1.41#get_float_input("Enter CL_max: ")
+    K = 0.038976721#get_float_input("Enter a value for K: ")
+    Cd_0 = 0.016494#get_float_input("Enter a value for Cd_0: ")
+    n = 0.9#get_float_input("Enter a value for Prop Efficiency, n: ")
+    P_A = 2240#get_float_input("Enter a value for Power Available in Watts: ")
 
-    v_cruise = get_float_input("Enter a value for Cruise Velocity: ")  # used for constant Vel calculations
+    v_cruise = 26.8224#get_float_input("Enter a value for Cruise Velocity: ")  # used for constant Vel calculations
 
     h = np.arange(11001)  # 0 to 11 km w/ 1 meter increments
 
@@ -522,18 +522,18 @@ def rate_of_climb_calculator():
 # Calculator for Project Part F
 def maneuvers():
     # Altitude Selection
-    user_altitude = get_float_input("\nEnter your altitude: ")
+    user_altitude = 2331.72#get_float_input("\nEnter your altitude: ")
     alt = Atmosphere(user_altitude)
 
     # Gather Aircraft Info
-    gross_weight = get_float_input('\nEnter the Gross Weight of the aircraft: ')
-    velocity = get_float_input('\nEnter the Cruise Velocity of the aircraft: ')
-    planform = get_float_input('\nEnter the Planform Area of the aircraft: ')
-    n_lower = get_float_input('\nEnter the Lower Structural Load Factor: ')
-    n_upper = get_float_input('\nEnter the Upper Structural Load Factor: ')
+    gross_weight = 294.3#get_float_input('\nEnter the Gross Weight of the aircraft: ')
+    velocity = 26.8224#get_float_input('\nEnter the Cruise Velocity of the aircraft: ')
+    planform = 1.00649158 #get_float_input('\nEnter the Planform Area of the aircraft: ')
+    n_lower = -0.872#get_float_input('\nEnter the Lower Structural Load Factor: ')
+    n_upper = 1.51#get_float_input('\nEnter the Upper Structural Load Factor: ')
 
-    cl_min = get_float_input('\nEnter the Min Coefficient of Lift: ')
-    cl_max = get_float_input('\nEnter the Max Coefficient of Lift: ')
+    cl_min = -0.698#get_float_input('\nEnter the Min Coefficient of Lift: ')
+    cl_max = 1.42#get_float_input('\nEnter the Max Coefficient of Lift: ')
 
     lift_min = cl_min * .5 * alt.density * velocity**2 * planform
     lift_max = cl_max * .5 * alt.density * velocity**2 * planform
@@ -584,14 +584,14 @@ def takeoff_and_landing_calculator():
     user_altitude = 583.4#get_float_input("\nEnter the Airport's altitude: ")
     alt = Atmosphere(user_altitude)
 
-    weight = 269.775#get_float_input("Enter the Aircraft's Weight: ")
+    weight = 294.3#get_float_input("Enter the Aircraft's Weight: ")
     mass = weight / 9.81
 
-    planform = .9#get_float_input("Enter the Planform Area: ")
-    CL_max = 1.41#get_float_input("Enter CL_max: ")
-    CL_rolling = .49#get_float_input("Enter CL_rolling: ")
-    CD_0 = .01851#get_float_input("Enter CD_0: ")
-    k = .045#get_float_input("Enter value of k: ")
+    planform = 1.00649158 #get_float_input("Enter the Planform Area: ")
+    CL_max = 1.42#get_float_input("Enter CL_max: ")
+    CL_rolling = .83853#get_float_input("Enter CL_rolling: ")
+    CD_0 = 0.016409#get_float_input("Enter CD_0: ")
+    k = 0.039#get_float_input("Enter value of k: ")
 
     power_available = 3 * .9 * ((alt.density / 1.225)) #get_float_input("Enter the Power Available in kW: ")
 
@@ -703,15 +703,15 @@ def range_and_endurance_calculator():
     user_altitude = 2331.72
     alt = Atmosphere(user_altitude)
 
-    CD_0 = 0.01851
+    CD_0 = 0.016409
     CL_max = 1.41
-    k = 0.45
+    k = 0.038976721
     bsfc = 9.7612e-7 # Wf dot / P ((Kg/s)/Watt); for Lycoming: ((0.48[kg/hr] * 9.81[m^2/sec]) / 3600[sec]) / 1340[Watts]
     fuel_mass = 5 # [kg] or 3.56 US gallons
     fuel_weight = fuel_mass * 9.81
-    gtow = 269.775
+    gtow = 294.3
     eta = 0.9
-    planform = 0.9
+    planform = 1.00649158
 
     CL_three_halves_to_CD = 0.25 * ((3 / (k * (CD_0 ** (1 / 3)))) ** (3 / 4))
     CL_to_CD = (1 / (4 * k * CD_0)) ** (1 / 2)
