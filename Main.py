@@ -706,11 +706,11 @@ def range_and_endurance_calculator():
     user_altitude = 2331.72
     alt = Atmosphere(user_altitude)
 
-    CD_0 = 0.017800
+    CD_0 = 0.017888
     CL_max = 1.41
     k = 0.038976721
     bsfc = 9.7612e-7  # Wf dot / P ((N/s)/Watt); for Lycoming: ((0.48[kg/hr] * 9.81[m^2/sec]) / 3600[sec]) / 1340[Watts]
-    fuel_mass = 5  # [kg] or 3.56 US gallons
+    fuel_mass = 1  # [kg] or 3.56 US gallons
     fuel_weight = fuel_mass * 9.81
     gtow = 30 * 9.81
     eta = 0.9
@@ -760,6 +760,22 @@ while True:
 
     # Cd,0
     if calc_selection == 1:
+
+        Swing = 1.0065
+        Sbackwheel = 0.00098564
+        Sfrontwheel = 0.00062650
+        Sfrontstrut = 0.00111361
+        Srearstrut = 0.00110969
+
+        Cd_0backwheel = 0.25 * (Sbackwheel / Swing) * 1  # more than a diameter away => q = 1
+        Cd_0frontwheel = 0.25 * (Sfrontwheel / Swing) * 1  # more than a diameter away => q = 1
+
+        Cd_0frontstrut = 1 * (Sfrontstrut / Swing) * 1.05  # not streamlined, fork
+        Cd_0rearstrut = 0.05 * (Srearstrut / Swing) * 1.05  # streamlined
+
+        Cd_0Gear = Cd_0frontstrut + Cd_0rearstrut + Cd_0frontwheel + 2 * Cd_0backwheel
+
+        print(f'The value for CD_0_Landing Gear is {Cd_0Gear}')
 
         cd_0_aircraft_dict = {}
 
