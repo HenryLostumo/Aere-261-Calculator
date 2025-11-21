@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="313d7d37-abe9-4d6e-a639-6cc16be9a9ab" name="Changes" comment="RV 9: Added missing range and endurance code">
+    <list default="true" id="313d7d37-abe9-4d6e-a639-6cc16be9a9ab" name="Changes" comment="Project Part G">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
     </list>
@@ -44,7 +44,7 @@
     "Python.test.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
+    "git-widget-placeholder": "main",
     "last_opened_file_path": "C:/Users/Gaming/PycharmProjects/Aere2610Calculator",
     "settings.editor.selected.configurable": "configurable.group.build"
   }

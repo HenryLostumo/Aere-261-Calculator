@@ -241,13 +241,13 @@ def cd_0_calculator():
 # CALCULATOR MADE DURING PROJECT PART C
 def cl_calculator():
     # Altitude Selection
-    user_altitude = get_float_input("\nEnter your altitude: ")
+    user_altitude = 2331.72#get_float_input("\nEnter your altitude: ")
     alt = Atmosphere(user_altitude)
 
     # Gather Aircraft Info
-    gross_weight = get_float_input('\nEnter the Gross Weight of the aircraft: ')
-    velocity = get_float_input('\nEnter the Velocity of the aircraft: ')
-    planform = get_float_input('\nEnter the Planform Area of the aircraft: ')
+    gross_weight = 45 * 9.81#get_float_input('\nEnter the Gross Weight of the aircraft: ')
+    velocity = 26.8224#get_float_input('\nEnter the Velocity of the aircraft: ')
+    planform = 1.00649158#get_float_input('\nEnter the Planform Area of the aircraft: ')
 
     # Calculate Cl
     cl = gross_weight / (.5 * alt.density * (velocity ** 2) * planform)
@@ -289,7 +289,7 @@ def cd_calculator():
 
     print('\nNow calculating Cd:')
     b = get_float_input('\nEnter your wingspan: ')
-    s = get_float_input('\nEnter your chord length: ')
+    s = get_float_input('\nEnter your planform area: ')
 
     span_eff_factor = get_float_input('\nEnter your span efficiency factor, e: ')
 
@@ -303,15 +303,15 @@ def cd_calculator():
 # Calculator for Project Part E
 def rate_of_climb_calculator():
     # aircraft specifications
-    W = 294.3#get_float_input("Enter the Weight, in Newtons: ")
-    S = 1.05#get_float_input("Enter the Planform Area: ")
-    Cl_max = 1.41#get_float_input("Enter CL_max: ")
-    K = 0.038976721#get_float_input("Enter a value for K: ")
-    Cd_0 = 0.016494#get_float_input("Enter a value for Cd_0: ")
-    n = 0.9#get_float_input("Enter a value for Prop Efficiency, n: ")
-    P_A = 2240#get_float_input("Enter a value for Power Available in Watts: ")
+    W = 294.3  # get_float_input("Enter the Weight, in Newtons: ")
+    S = 1.0065  # get_float_input("Enter the Planform Area: ")
+    Cl_max = 1.41  # get_float_input("Enter CL_max: ")
+    K = 0.038976721  # get_float_input("Enter a value for K: ")
+    Cd_0 = 0.0178  # get_float_input("Enter a value for Cd_0: ")
+    n = 0.9  # get_float_input("Enter a value for Prop Efficiency, n: ")
+    P_A = 2240  # get_float_input("Enter a value for Power Available in Watts: ")
 
-    v_cruise = 26.8224#get_float_input("Enter a value for Cruise Velocity: ")  # used for constant Vel calculations
+    v_cruise = 26.8224  # get_float_input("Enter a value for Cruise Velocity: ")  # used for constant Vel calculations
 
     h = np.arange(11001)  # 0 to 11 km w/ 1 meter increments
 
@@ -522,38 +522,38 @@ def rate_of_climb_calculator():
 # Calculator for Project Part F
 def maneuvers():
     # Altitude Selection
-    user_altitude = 2331.72#get_float_input("\nEnter your altitude: ")
+    user_altitude = 2331.72  # get_float_input("\nEnter your altitude: ")
     alt = Atmosphere(user_altitude)
 
     # Gather Aircraft Info
-    gross_weight = 294.3#get_float_input('\nEnter the Gross Weight of the aircraft: ')
-    velocity = 26.8224#get_float_input('\nEnter the Cruise Velocity of the aircraft: ')
-    planform = 1.00649158 #get_float_input('\nEnter the Planform Area of the aircraft: ')
-    n_lower = -0.872#get_float_input('\nEnter the Lower Structural Load Factor: ')
-    n_upper = 1.51#get_float_input('\nEnter the Upper Structural Load Factor: ')
+    gross_weight = 294.3  # get_float_input('\nEnter the Gross Weight of the aircraft: ')
+    velocity = 26.8224  # get_float_input('\nEnter the Cruise Velocity of the aircraft: ')
+    planform = 1.00649158  # get_float_input('\nEnter the Planform Area of the aircraft: ')
+    n_lower = -0.872  # get_float_input('\nEnter the Lower Structural Load Factor: ')
+    n_upper = 1.51  # get_float_input('\nEnter the Upper Structural Load Factor: ')
 
-    cl_min = -0.698#get_float_input('\nEnter the Min Coefficient of Lift: ')
-    cl_max = 1.42#get_float_input('\nEnter the Max Coefficient of Lift: ')
+    cl_min = -0.698  # get_float_input('\nEnter the Min Coefficient of Lift: ')
+    cl_max = 1.42  # get_float_input('\nEnter the Max Coefficient of Lift: ')
 
-    lift_min = cl_min * .5 * alt.density * velocity**2 * planform
-    lift_max = cl_max * .5 * alt.density * velocity**2 * planform
+    lift_min = cl_min * .5 * alt.density * velocity ** 2 * planform
+    lift_max = cl_max * .5 * alt.density * velocity ** 2 * planform
 
-    n_aero_min = lift_min/gross_weight
-    n_aero_max = lift_max/gross_weight
+    n_aero_min = lift_min / gross_weight
+    n_aero_max = lift_max / gross_weight
 
     print(f'\nThe Aerodynamic Load Factor, n, is: {n_aero_max}')
 
     # Calculate Pull-Up Radii
-    #pullup_rad_aero_min = ((gross_weight/9.81) * velocity**2) / (lift_min - gross_weight)
+    # pullup_rad_aero_min = ((gross_weight/9.81) * velocity**2) / (lift_min - gross_weight)
     pullup_rad_aero_max = (velocity ** 2) / (9.81 * (n_aero_max - 1))
-    #pullup_rad_struct_lower = velocity**2 / (9.81 * (n_lower - 1))
+    # pullup_rad_struct_lower = velocity**2 / (9.81 * (n_lower - 1))
     pullup_rad_struct_upper = (velocity ** 2) / (9.81 * (n_upper - 1))
 
     # Calculate Level-Turn Radii
-    #levelturn_rad_aero_min = velocity ** 2 / (9.81 * (((n_aero_min ** 2) - 1) ** (1 / 2)))
-    levelturn_rad_aero_max = velocity ** 2 / (9.81 * (((n_aero_max**2) - 1) ** (1/2)))
-    #levelturn_rad_struct_lower = velocity ** 2 / (9.81 * (((n_lower**2) - 1) ** (1/2)))
-    levelturn_rad_struct_upper = velocity ** 2 / (9.81 * (((n_upper**2) - 1) ** (1/2)))
+    # levelturn_rad_aero_min = velocity ** 2 / (9.81 * (((n_aero_min ** 2) - 1) ** (1 / 2)))
+    levelturn_rad_aero_max = velocity ** 2 / (9.81 * (((n_aero_max ** 2) - 1) ** (1 / 2)))
+    # levelturn_rad_struct_lower = velocity ** 2 / (9.81 * (((n_lower**2) - 1) ** (1/2)))
+    levelturn_rad_struct_upper = velocity ** 2 / (9.81 * (((n_upper ** 2) - 1) ** (1 / 2)))
 
     pullup_limit = "Structural" if pullup_rad_struct_upper > pullup_rad_aero_max else "Aerodynamic"
     levelturn_limit = "Structural" if levelturn_rad_struct_upper > levelturn_rad_aero_max else "Aerodynamic"
@@ -581,26 +581,26 @@ def takeoff_and_landing_calculator():
     import numpy as np
     import matplotlib.pyplot as plt
 
-    user_altitude = 583.4#get_float_input("\nEnter the Airport's altitude: ")
+    user_altitude = 583.4  # get_float_input("\nEnter the Airport's altitude: ")
     alt = Atmosphere(user_altitude)
 
-    weight = 294.3#get_float_input("Enter the Aircraft's Weight: ")
+    weight = 294.3  # get_float_input("Enter the Aircraft's Weight: ")
     mass = weight / 9.81
 
-    planform = 1.00649158 #get_float_input("Enter the Planform Area: ")
-    CL_max = 1.42#get_float_input("Enter CL_max: ")
-    CL_rolling = .83853#get_float_input("Enter CL_rolling: ")
-    CD_0 = 0.016409#get_float_input("Enter CD_0: ")
-    k = 0.039#get_float_input("Enter value of k: ")
+    planform = 1.00649158  # get_float_input("Enter the Planform Area: ")
+    CL_max = 1.42  # get_float_input("Enter CL_max: ")
+    CL_rolling = .83853  # get_float_input("Enter CL_rolling: ")
+    CD_0 = 0.017800  # get_float_input("Enter CD_0: ")
+    k = 0.039  # get_float_input("Enter value of k: ")
 
-    power_available = 3 * .9 * ((alt.density / 1.225)) #get_float_input("Enter the Power Available in kW: ")
+    power_available = 3 * .9 * ((alt.density / 1.225))  # get_float_input("Enter the Power Available in kW: ")
 
-    mu_rolling = .04#get_float_input("Enter the Rolling Friction (typ 0.03 - 0.05): ")
-    mu_braking = .4#get_float_input("Enter the Braking Friction (typ 0.3 - 0.5): ")
-    n_flare = 1.1#get_float_input("Enter the Flare Load Factor: ")
-    gamma = 4#get_float_input("Enter the Climb Angle (deg): ")
-    obstacle_height = 15.24#get_float_input("Enter the Obstacle Height (15.24 m typ): ")
-    approach_angle = 5.71#get_float_input("Enter the Approach Angle (deg): ")
+    mu_rolling = .04  # get_float_input("Enter the Rolling Friction (typ 0.03 - 0.05): ")
+    mu_braking = .4  # get_float_input("Enter the Braking Friction (typ 0.3 - 0.5): ")
+    n_flare = 1.1  # get_float_input("Enter the Flare Load Factor: ")
+    gamma = 4  # get_float_input("Enter the Climb Angle (deg): ")
+    obstacle_height = 15.24  # get_float_input("Enter the Obstacle Height (15.24 m typ): ")
+    approach_angle = 5.71  # get_float_input("Enter the Approach Angle (deg): ")
 
     rho = alt.density
     v_stall = np.sqrt((2 * weight) / (rho * planform * CL_max))
@@ -610,14 +610,14 @@ def takeoff_and_landing_calculator():
     thrust = (power_available * 1000) / v_inf_takeoff
     print(f"\nThrust available: {thrust} N")
 
-    drag_liftoff = 0.5 * rho * v_inf_takeoff**2 * planform * (CD_0 + k * CL_rolling**2)
-    lift_liftoff = 0.5 * rho * v_inf_takeoff**2 * planform * CL_rolling
+    drag_liftoff = 0.5 * rho * v_inf_takeoff ** 2 * planform * (CD_0 + k * CL_rolling ** 2)
+    lift_liftoff = 0.5 * rho * v_inf_takeoff ** 2 * planform * CL_rolling
 
     dis_ground_takeoff = (1.44 * (weight / planform)) / (9.81 * rho * CL_max *
-                      ((thrust / weight) - (drag_liftoff / weight) -
-                      mu_rolling * (1 - lift_liftoff / weight)))
+                                                         ((thrust / weight) - (drag_liftoff / weight) -
+                                                          mu_rolling * (1 - lift_liftoff / weight)))
 
-    R_transition = (v_liftoff**2) / ((n_flare - 1) * 9.81)
+    R_transition = (v_liftoff ** 2) / ((n_flare - 1) * 9.81)
     h_transition = R_transition * (1 - np.cos(np.radians(gamma)))
     dis_transition_takeoff = R_transition * np.sin(np.radians(gamma))
 
@@ -629,13 +629,14 @@ def takeoff_and_landing_calculator():
     v_touchdown = 1.3 * v_stall
     v_inf_landing = 0.7 * v_touchdown
 
-    drag_landing = 0.5 * rho * v_inf_landing**2 * planform * (CD_0 + k * CL_rolling**2)
-    lift_landing = 0.5 * rho * v_inf_landing**2 * planform * CL_rolling
+    drag_landing = 0.5 * rho * v_inf_landing ** 2 * planform * (CD_0 + k * CL_rolling ** 2)
+    lift_landing = 0.5 * rho * v_inf_landing ** 2 * planform * CL_rolling
 
     dis_ground_landing = (1.69 * (weight / planform)) / (9.81 * rho * CL_max *
-                          ((drag_landing / weight) + mu_braking * (1 - lift_landing/weight)))
+                                                         ((drag_landing / weight) + mu_braking * (
+                                                                     1 - lift_landing / weight)))
 
-    R_flare = (v_touchdown**2) / ((n_flare - 1) * 9.81)
+    R_flare = (v_touchdown ** 2) / ((n_flare - 1) * 9.81)
     h_flare = R_flare * (1 - np.cos(np.radians(approach_angle)))
     dis_flare_landing = R_flare * np.sin(np.radians(approach_angle))
 
@@ -657,7 +658,7 @@ def takeoff_and_landing_calculator():
                           200)
     y_climb = y_transition[-1] + np.tan(np.radians(gamma)) * (x_climb - x_transition[-1])
 
-    plt.figure(figsize=(10,6))
+    plt.figure(figsize=(10, 6))
     plt.plot(x_ground, y_ground, label="Ground Roll")
     plt.plot(x_transition, y_transition, label="Transition Arc")
     plt.plot(x_climb, y_climb, label="Climb")
@@ -675,7 +676,8 @@ def takeoff_and_landing_calculator():
     x_flare = dis_approach_landing + ((-R_flare) * np.sin(theta2)) + dis_flare_landing
     y_flare = R_flare * (1 - np.cos(theta2))
 
-    x_landing_ground = np.linspace(dis_approach_landing + dis_flare_landing, dis_approach_landing + dis_flare_landing + dis_ground_landing, 200)
+    x_landing_ground = np.linspace(dis_approach_landing + dis_flare_landing,
+                                   dis_approach_landing + dis_flare_landing + dis_ground_landing, 200)
     y_landing_ground = np.zeros_like(x_landing_ground)
 
     plt.figure(figsize=(10, 6))
@@ -699,37 +701,47 @@ stored_calculations = {}
 print("\n\nWARNING: ALL UNITS MUST BE METRIC\n\n")  # std atm package only gives metric outputs and i aint doing allat
 time.sleep(1)
 
+
 def range_and_endurance_calculator():
     user_altitude = 2331.72
     alt = Atmosphere(user_altitude)
 
-    CD_0 = 0.016409
+    CD_0 = 0.017800
     CL_max = 1.41
     k = 0.038976721
-    bsfc = 9.7612e-7 # Wf dot / P ((Kg/s)/Watt); for Lycoming: ((0.48[kg/hr] * 9.81[m^2/sec]) / 3600[sec]) / 1340[Watts]
-    fuel_mass = 5 # [kg] or 3.56 US gallons
+    bsfc = 9.7612e-7  # Wf dot / P ((N/s)/Watt); for Lycoming: ((0.48[kg/hr] * 9.81[m^2/sec]) / 3600[sec]) / 1340[Watts]
+    fuel_mass = 5  # [kg] or 3.56 US gallons
     fuel_weight = fuel_mass * 9.81
-    gtow = 294.3
+    gtow = 30 * 9.81
     eta = 0.9
     planform = 1.00649158
+    vel_cruise = 26.8224
 
     CL_three_halves_to_CD = 0.25 * ((3 / (k * (CD_0 ** (1 / 3)))) ** (3 / 4))
     CL_to_CD = (1 / (4 * k * CD_0)) ** (1 / 2)
 
-    v_stall = ((2 * gtow ) / (alt.density * planform * CL_max)) ** (1/2)
+    v_stall = ((2 * gtow) / (alt.density * planform * CL_max)) ** (1 / 2)
     print(f'The Stall Velocity is {v_stall}\n')
+
+
 
     max_endurance = ((eta / bsfc) * ((2 * alt.density * planform) ** (1 / 2)) * CL_three_halves_to_CD
                      * (((gtow - fuel_weight) ** (-1 / 2)) - (gtow ** (-1 / 2))))
     vel_max_endurance = ((2 / alt.density) * (gtow / planform) * ((k / (3 * CD_0)) ** (1 / 2))) ** (1 / 2)
+
     print(f'The Max Endurance is {max_endurance / 3600} hours')
     print(f'The Velocity for Max Endurance is {vel_max_endurance}\n')
+
+    thrust_req = 0.5 * alt.density * (vel_cruise ** 2) * planform * CD_0 + ((2 * k * (gtow ** 2)) / (alt.density * (vel_cruise ** 2) * planform))
+    p_req = 0.5 * alt.density * (vel_cruise ** 3) * planform * CD_0 + ((2 * k * (gtow ** 2)) / (alt.density * vel_cruise * planform))
+
+    print(f'The Thrust Required at Cruise Velocity is {thrust_req}\n')
+    print(f'The Power Required at Cruise Velocity is {p_req}\n')
 
     max_range = (eta / bsfc) * CL_to_CD * math.log(gtow / (gtow - fuel_weight))
     vel_max_range = ((2 / alt.density) * (gtow / planform) * ((k / CD_0) ** (1 / 2))) ** (1 / 2)
     print(f'The Max Range is {max_range / 1000} km')
     print(f'The Velocity for Max Range is {vel_max_range}')
-
 
 
 # main loop
